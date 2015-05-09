@@ -1,0 +1,12 @@
+name: Deluge Sickbeard Plugin
+description: Deluge torrent integration with Sickbeard
+baseurl: /DelugeSickbeardPlugin
+user-url: https://github.com/srluge
+project-url: https://github.com/srluge/DelugeSickbeardPlugin
+egg-base-url: https://github.com/srluge/DelugeSickbeardPlugin/dist
+egg-base-name: Sickbeard
+latest-version: 0.1.0
+markdown: redcarpet
+redcarpet:
+  extensions: ["no_intra_emphasis", "fenced_code_blocks", "autolink", "tables", "with_toc_data"]
+permalink: /:categories/:title/

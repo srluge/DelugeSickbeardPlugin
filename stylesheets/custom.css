@@ -1,0 +1,28 @@
+td,
+th {
+  padding: 0px 4px 0px 4px;
+  display: table-cell;
+  vertical-align: top; 
+}
+
+#main-content h2.post-title {
+    margin-bottom: 0px;
+}
+
+#main-content p.post-meta {
+    font-style: italic;
+    font-size: 10px;
+}
+
+ol {
+    padding-left: 20px;
+}
+
+aside#sidebar p.repo-owner,
+aside#sidebar p.repo-owner a {
+  text-align: center;
+}
+
+.warning {
+    color: orange;
+}
