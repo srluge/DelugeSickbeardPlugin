@@ -122,6 +122,9 @@ class TorrentInfo:
           TorrentMode: Single- or multi-file, or unknown
         """
 
+        if not torrent or not torrent.torrent_info:
+            return TorrentMode.UNKNOWN
+
         files = torrent.torrent_info.files()
 
         if not files or len(files) == 0:
@@ -148,8 +151,9 @@ class TorrentInfo:
 
     @staticmethod
     def get_save_path(torrent):
-        """Return the save path. During downloading this may be another path
-           then the path after the copnfigurable final move.
+        """Return the save path(directory). During downloading this may be
+           another path then the path after the configurable final move. Or
+           after a manual move.
 
         Args:
           torrent (deluge.core.torrent): Torrent
@@ -162,10 +166,11 @@ class TorrentInfo:
 
     @staticmethod
     def get_saved_path(torrent):
-        """Return the path torrent currently is saved.
+        """Return the path(directory) torrent currently is saved.
 
-        SINGLE_FILE torrent: <save-path>
+        SINGLE_FILE torrent: <save-path>/
         MULTI-FILE  torrent: <save-path>/<name-torrent>
+        UNKNOWN     torrent: <save-path>/<name-torrent>
 
         Args:
           torrent (deluge.core.torrent): Torrent
@@ -178,7 +183,7 @@ class TorrentInfo:
         name = TorrentInfo.get_display_name(torrent)
         mode = TorrentInfo.get_mode(torrent)
 
-        if  mode == TorrentMode.MULTI_FILE:
+        if  mode == TorrentMode.MULTI_FILE or mode == TorrentMode.UNKNOWN:
             path += "/" + name
 
         return path.replace("//","/")

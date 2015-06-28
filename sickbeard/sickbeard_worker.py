@@ -20,7 +20,7 @@
 
 import logging
 import sys
-import error
+import error      as sb_err
 
 from twisted.internet       import defer, reactor
 from twisted.internet.defer import inlineCallbacks
@@ -151,11 +151,27 @@ class SickbeardWorker(Worker):
             task.status = TaskStatus.FAILED
 
             self.tlog.error('Exception occurred while processing torrent: ' + str(e))
-            for line in error.format_exception():
+            for line in sb_err.format_exception():
                 self.tlog.error("%s" % line)
         finally:
             self.tasklog.add(task)
             defer.returnValue(result)
+
+    def _ensure_saved_path(self, torrent):
+        dir  = TorrentInfo.get_saved_path(torrent)
+        name = TorrentInfo.get_display_name(torrent)
+        mode = TorrentInfo.get_mode(torrent)
+
+        if mode   == TorrentMode.UNKNOWN     and not os.path.isdir(dir):
+            self.tlog.info("Treating torrent with mode UNKNOWN as MULTI_FILE");
+            self.tlog.info("Creating missing directory %s for correct failed handling with Sickbeard." % dir);
+            os.makedirs(dir)
+        elif mode == TorrentMode.MULTI_FILE  and not os.path.isdir(dir):
+            self.tlog.info("Creating missing directory %s for correct failed handling with Sickbeard." % dir);
+            os.makedirs(dir)
+        elif mode == TorrentMode.SINGLE_FILE and not os.path.isfile(dir + "/" + name):
+            self.tlog.info("Creating missing file %s for correct failed handling with Sickbeard." % (dir + "/" + name));
+            open(dir + "/" + name, 'a').close()
 
     @inlineCallbacks
     def call_sickbeard(self, task):
@@ -244,10 +260,7 @@ class SickbeardWorker(Worker):
 
             # Downloaded content directory/file must exist, even if it download actually failed, in order
             # for Sickbeard to be able to process the torrent
-            if mode == TorrentMode.MULTI_FILE and not os.path.isdir(dir):
-                os.makedirs(dir)
-            elif mode == TorrentMode.SINGLE_FILE and not os.path.isfile(dir + "/" + name):
-                open(dir + "/" + name, 'a').close()
+            self._ensure_saved_path(torrent);
 
             client  = WebClient(self.wlog)
             result  = yield client.get(base_url, args = params, username = self.config['username'], password = self.config['password'])
@@ -255,7 +268,7 @@ class SickbeardWorker(Worker):
             result = False
 
             self.tlog.error('Exception occurred while processing torrent: ' + str(e))
-            for line in error.format_exception():
+            for line in sb_err.format_exception():
                 self.tlog.error("%s" % line)
 
         errors  = 0
