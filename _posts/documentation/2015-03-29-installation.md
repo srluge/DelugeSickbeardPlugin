@@ -7,6 +7,8 @@ categories: documentation
 
 The installation of this plugin is straight forward. First make sure to check the [requirements][plugin-requirements] page. Then follow the instructions below. Choose between: (Web) *GUI installation*, *Manual installation* or *Client/Server installation*. For more information on installing Deluge plugins, visit the [Deluge Installing Plugins][deluge-install] page. Take note of how to deal with python version differences and take note of the client/server setup instructions if relevant.
 
+As an alternative to the default egg based installation, the plugin can also be installed from source. In that case follow the instructions on [Installation Deluge Sickbeard Plugin from source][plugin-install-from-source]
+
 Next step after installation below: [Configuration Deluge Sickbeard Plugin][plugin-configuration]
 
 ## (Web) GUI installation
@@ -53,3 +55,4 @@ After downloading the egg, restart Deluge.
 [egg]: {{ site.egg-base-url }}/{{ site.egg-base-name }}-{{ site.egg-latest-version }}.egg
 [plugin-requirements]: {{ site.baseurl }}/documentation/requirements
 [plugin-configuration]: {{ site.baseurl }}/documentation/configuration
+[plugin-install-from-source]: {{ site.baseurl }}/documentation/development
