@@ -27,7 +27,7 @@ class WebUI(WebPluginBase):
 
     scripts       = [get_resource("sickbeard.js"), get_resource("moment-with-locales.js")]
     debug_scripts = scripts
-    stylesheets   = [get_resource("sickbeard.css")]
+    #stylesheets   = [get_resource("sickbeard.css")]
 
     def enable(self):
         log.debug("Sickbeard WebUI plugin enable")
